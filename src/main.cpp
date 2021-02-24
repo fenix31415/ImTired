@@ -2,7 +2,6 @@
 
 #include "Log.h"
 #include "Hooks.h"
-#include "Events.h"
 #include "CharacterHandler.h"
 
 #include <ShObjIdl.h>
@@ -53,38 +52,10 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a
 	return true;
 }
 
-/*void ApplyNPCRecords()
-{
-	auto dataHandler = RE::TESDataHandler::GetSingleton();
-	if (dataHandler) {
-		for (const auto& actorbase : dataHandler->GetFormArray<RE::TESNPC>()) {
-			if (actorbase && !actorbase->IsPlayer()) {
-				//logger::info("NPC {} loaded, his name: ", uint64_t(actorbase));
-			} else {
-				//logger::info("Player {} loaded, his name: ", uint64_t(actorbase));
-			}
-		}
-	}
-}*/
-
-void OnInit(SKSE::MessagingInterface::Message* a_msg)
-{
-	switch (a_msg->type) {
-	case SKSE::MessagingInterface::kDataLoaded:
-		// ApplyNPCRecords();
-		Events::Register();
-		break;
-	}
-}
-
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 {
 	SKSE::Init(a_skse);
-	auto messaging = SKSE::GetMessagingInterface();
-	if (!messaging->RegisterListener("SKSE", OnInit)) {
-		logger::critical("Failed to register messaging listener!\n");
-		return false;
-	}
+
 	Hooks::apply_hooks(std::uintptr_t(CharHandler::is_strong));
 
 	return true;

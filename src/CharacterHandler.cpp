@@ -4,7 +4,13 @@ namespace CharHandler
 {
 	bool is_init_char(RE::TESObjectREFR* actor)  // we just skip handling if false
 	{
-		return actor->formType.get() == RE::FormType::ActorCharacter && actor->pad94 == 0xFE314159;
+		if (actor->formType.get() != RE::FormType::ActorCharacter)
+			return false;
+		if (actor->pad94 != 0xFE314159) {
+			info("is_init_char, Got new actor ({}), was = {}. Initialising", (uint64_t)actor, actor->pad94);
+			actor->pad94 = 0xFE314159;
+		}
+		return true;
 	}
 
 	namespace DistanceManaging

@@ -4,7 +4,6 @@
 //#define DEBUG_ON
 //#define DEBUG_INFO
 //#define DEBUG_ERRORS
-//#define DEBUG_EVENTS
 
 template <class... Args>
 struct info
