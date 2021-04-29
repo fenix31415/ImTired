@@ -9,6 +9,8 @@ namespace CharHandler
 		if (actor->pad94 != 0xFE314159) {
 			info("is_init_char, Got new actor ({}), was = {}. Initialising", (uint64_t)actor, actor->pad94);
 			actor->pad94 = 0xFE314159;
+			actor->pad1C = 0;
+			actor->pad1B = 0;
 		}
 		return true;
 	}
@@ -195,7 +197,8 @@ namespace CharHandler
 		if (item) {
 			cost = WeaponInfo::weap_cost(get_weapon_type(actor));
 		} else {
-			error("get_cost, ({}) hasnt item", (uint64_t)actor);
+			info("actor's ({}) item is null, seems creature. Assuming H2H", (uint64_t)actor);
+			cost = WeaponInfo::weap_cost(RE::WEAPON_TYPE::kHandToHandMelee);
 		}
 		return cost;
 	}
@@ -212,6 +215,12 @@ namespace CharHandler
 
 		float cost = 100.0f;
 		cost = get_cost(actor);
+
+		auto all_stamina = actor->GetBaseActorValue(RE::ActorValue::kStamina);
+		if (3 * cost > all_stamina) {
+			info("too week ({}), {}/{}. making 3 hits available", (uint64_t)actor, cost, all_stamina);
+			cost = all_stamina / 3;
+		}
 
 		if (is_relaxing(actor, cost))
 			return false;

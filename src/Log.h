@@ -2,8 +2,8 @@
 
 #include "SKSE/Impl/PCH.h"
 //#define DEBUG_ON
-//#define DEBUG_INFO
-//#define DEBUG_ERRORS
+#define DEBUG_INFO
+#define DEBUG_ERRORS
 
 template <class... Args>
 struct info
